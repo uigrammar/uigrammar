@@ -1,0 +1,65 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.3.21"
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+}
+
+apply from: file("${rootProject.projectDir}/ktlint.gradle")
+
+group "org.droidmate"
+version "1.0-SNAPSHOT"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+apply plugin: "java"
+
+task sourcesJar(type: Jar, dependsOn: "classes") {
+    classifier = "sources"
+    from sourceSets.main.allJava
+    from sourceSets.main.allSource
+    from sourceSets.test.allSource
+}
+
+apply plugin: "application"
+
+application {
+    applicationDefaultJvmArgs = [/*"-ea",*/"-Dlogback.configurationFile=default-logback.xml"]
+    mainClassName = "org.uigrammar.ExperimentMain"
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "org.uigrammar.ExperimentMain"
+    }
+}
+
+apply plugin: "maven"
+
+artifacts {
+    archives sourcesJar
+}
+
+dependencies {
+    testImplementation("junit:junit:4.12")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.21")
+
+    implementation("org.slf4j:slf4j-api:1.7.25")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0")
+    
+    implementation("org.json:json:20160212")
+    implementation("com.google.code.gson:gson:2.8.0")
+
+    compile("org.droidmate:droidmate-2:2.0.0")
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
