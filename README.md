@@ -1,4 +1,4 @@
-# UI Grammars -- ICSE 2020
+# UI Grammars
 
 ## Building 
 
